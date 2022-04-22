@@ -1,0 +1,11 @@
+name: HidePlayerTag
+version: 1.0
+author: Obeeron
+main: fr.obeeron.hideplayertag.HidePlayerTag
+api-version: 1.16
+
+commands:
+  hidetag:
+    description: Switch visibility of other players' tag
+    usage: /hidetag [true | false]
+    permission: hideplayertag.hidetag
