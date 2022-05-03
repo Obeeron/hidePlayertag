@@ -13,7 +13,7 @@ Minecraft plugin to hide players' tag
 ```
 /hidtag
 ```
-Show the current visibility.  
+Swap the current tag visibility.  
 
 ```
 /hidetag {true | false}
@@ -23,4 +23,4 @@ When **/hitetag** is set to false, you enter staff mode. You can see every playe
 
 # Permission
 
-The hitetag command is usable under the hidetag.hidetag permission.
+The hitetag command is usable under the hideplayertag.hidetag permission.

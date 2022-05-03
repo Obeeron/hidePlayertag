@@ -1,7 +1,6 @@
 package fr.obeeron.hideplayertag.commands;
 
 import fr.obeeron.hideplayertag.HidePlayerTag;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,10 +10,8 @@ import org.bukkit.entity.Player;
 public class CommandHideTag implements CommandExecutor {
 
     public static String commandName = "hidetag";
-    public static String rpVisibilityFeedback = "Player tags are now hidden.";
-    public static String staffVisibilityFeedback = "Player tags are no longer hidden.";
 
-    private HidePlayerTag hptPlugin;
+    private final HidePlayerTag hptPlugin;
 
     public CommandHideTag(HidePlayerTag hptPlugin){
         this.hptPlugin = hptPlugin;
@@ -26,6 +23,13 @@ public class CommandHideTag implements CommandExecutor {
         if(!(sender instanceof Player))
             return true;
 
+        // Check for permission
+        if(!sender.hasPermission("hideplayertag.hidetag"))
+        {
+            sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command.");
+            return true;
+        }
+
         // Check command validity
         if(args.length > 1)
             return false;
@@ -35,8 +39,8 @@ public class CommandHideTag implements CommandExecutor {
 
         // ./hidetag
         if(args.length == 0){
-            String tagStatus = ChatColor.BOLD+((hasTagsEnabled)? ChatColor.GREEN+"[Visible]" : ChatColor.RED+"[Hidden]");
-            player.sendMessage("Current player tags visibility : "+tagStatus);
+            // Swap the tags visibility
+            setTagsVisibility(player, !hasTagsEnabled);
             return true;
         }
 
@@ -44,10 +48,14 @@ public class CommandHideTag implements CommandExecutor {
         else if (args[0].equalsIgnoreCase("true")) {
             if(hasTagsEnabled)
                 setTagsVisibility(player, false);
+            else
+                player.sendMessage("Player tags are already hidden.");
         }
         else if (args[0].equalsIgnoreCase("false")) {
             if (!hasTagsEnabled)
                 setTagsVisibility(player, true);
+            else
+                player.sendMessage("Player tags are already visible.");
         }
         else
             return false;
@@ -60,13 +68,13 @@ public class CommandHideTag implements CommandExecutor {
         if(state)
         {
             hptPlugin.joinStaffTagTeam(player);
-            player.sendMessage(staffVisibilityFeedback);
+            player.sendMessage("Player tags visibility is now : "+ChatColor.BOLD+ChatColor.GREEN+"[Visible]");
         }
         // Hide all tags
         else
         {
             hptPlugin.joinRpTagTeam(player);
-            player.sendMessage(rpVisibilityFeedback);
+            player.sendMessage("Player tags visibility is now : "+ChatColor.BOLD+ChatColor.RED+"[Hidden]");
         }
     }
 
